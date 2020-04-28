@@ -19,10 +19,10 @@ il programma aspetta la terminazione di gcc (e riceve il valore di uscita di gcc
 se gcc ha successo, il programma invoca fork() ed il processo figlio esegue il programma hello appena compilato dove però l'output di hello va "redirezionato" sul file output.txt (quello creato all'avvio del programma, più sopra).
 il programma non aspetta la terminazione del processo figlio ma "prende nota" del PID del processo figlio aggiungendolo in coda ad un array dinamico chiamato pid_list.
 
-gestire gli zombie: 
+gestire i processi zombie: 
 ogni volta che un processo figlio termina, il programma riceve un segnale SIGCHLD ed invoca wait.
 vedere ad esempio: https://github.com/marcotessarotto/exOpSys/blob/6bd8188175c5d4cc380808cbce2befebac65557b/006.3signals4ipc/signals4ipc.c#L105
-[il signal handler potrebbe anche rimuovere il PID del processo figlio "aspettato" da pid_list ma c'è un problema di concorrenza, per cui dobbiamo prima vedere a lezione i "semafori"]
+[il signal handler potrebbe anche rimuovere il PID del processo figlio "aspettato" da pid_list ma ci può essere un problema di concorrenza nell'accesso a pid_list, questo aspetto va discusso]
 
 *terza parte dell'esercizio*
 con un meccanismo da definire più in dettaglio (cioè: parliamone in classe), il programma termina i processi figli eseguiti nel punto precedente, se questi rimangono in esecuzione per più di 10 secondi.
