@@ -1,4 +1,5 @@
-# esercizio-C-TEMPLATE
+# esercizio-C-2020-04-28-gcc
+
 
 Le specifiche dell'esercizio si trovano nel file 'specifiche.txt'.
 
