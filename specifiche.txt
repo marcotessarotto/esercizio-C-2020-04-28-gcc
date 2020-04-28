@@ -1,1 +1,21 @@
-...
+scrivere il seguente programma:
+
+verifica se esiste la cartella src; se non esiste, crea la cartella src
+
+dentro src, se non esiste già, crea il file hello_world.c contenente il codice sorgente del programma che scrive "hello world" su stdout.
+
+dentro src, crea un file output.txt; se il file esiste già, lo "tronca" a dimensione 0
+
+entra in un ciclo senza fine: 
+
+monitora il file hello_world.c e ogni volta che viene notificato un evento di modifica del file (quando il file viene modificato da un editor quale pico, gedit o altro) il programma esegue il compilatore gcc per compilare il codice sorgente contenuto nel file hello_world.c e produrre un file eseguibile di nome hello (gcc hello_world.c -o hello)
+
+*seconda parte dell'esercizio:*
+se gcc ha successo, il programma invoca fork() ed il processo figlio esegue il programma hello appena compilato dove però l'output di hello va "redirezionato" sul file output.txt
+il programma non aspetta la terminazione del processo figlio ma "prende nota" del PID del processo figlio aggiungendolo in coda ad un array dinamico chiamato pid_list
+
+
+*terza parte dell'esercizio*
+il programma termina i processi figli eseguiti nel punto precedente, se questi rimangono in esecuzione per più di 10 secondi.
+[il controllo sui processi figli ancora in esecuzione potrebbe essere fatto ogni volta che il programma passa attraverso la seconda parte dell'esercizio oppure attraverso un timer (che non abbiamo ancora visto a lezione)]
+
