@@ -1,21 +1,30 @@
 scrivere il seguente programma:
 
 verifica se esiste la cartella src; se non esiste, crea la cartella src
+(creare directory: man 2 mkdir, controllo esistenza file, ad esempio: https://github.com/marcotessarotto/exOpSys/blob/6bd8188175c5d4cc380808cbce2befebac65557b/011filesrw/01filesrw.c#L17 )
 
 dentro src, se non esiste già, crea il file hello_world.c contenente il codice sorgente del programma che scrive "hello world" su stdout.
 
 dentro src, crea un file output.txt; se il file esiste già, lo "tronca" a dimensione 0
 
+il programma riceve in un suo signal handler il segnale SIGCHLD
+esempio: https://github.com/marcotessarotto/exOpSys/blob/6bd8188175c5d4cc380808cbce2befebac65557b/006.3signals4ipc/signals4ipc.c#L136
+
 entra in un ciclo senza fine: 
 
-monitora il file hello_world.c e ogni volta che viene notificato un evento di modifica del file (quando il file viene modificato da un editor quale pico, gedit o altro) il programma esegue il compilatore gcc per compilare il codice sorgente contenuto nel file hello_world.c e produrre un file eseguibile di nome hello (gcc hello_world.c -o hello)
+monitora il file hello_world.c e ogni volta che viene notificato un evento di modifica del file (quando il file viene modificato da un editor quale pico, gedit o altro) il programma esegue il compilatore gcc per compilare il codice sorgente contenuto nel file hello_world.c e produrre un file eseguibile di nome hello (gcc hello_world.c -o hello).
+il programma aspetta la terminazione di gcc (e riceve il valore di uscita di gcc perchè servirà nel punto successivo).
 
 *seconda parte dell'esercizio:*
-se gcc ha successo, il programma invoca fork() ed il processo figlio esegue il programma hello appena compilato dove però l'output di hello va "redirezionato" sul file output.txt
-il programma non aspetta la terminazione del processo figlio ma "prende nota" del PID del processo figlio aggiungendolo in coda ad un array dinamico chiamato pid_list
+se gcc ha successo, il programma invoca fork() ed il processo figlio esegue il programma hello appena compilato dove però l'output di hello va "redirezionato" sul file output.txt (quello creato all'avvio del programma, più sopra).
+il programma non aspetta la terminazione del processo figlio ma "prende nota" del PID del processo figlio aggiungendolo in coda ad un array dinamico chiamato pid_list.
 
+gestire gli zombie: 
+ogni volta che un processo figlio termina, il programma riceve un segnale SIGCHLD ed invoca wait.
+vedere ad esempio: https://github.com/marcotessarotto/exOpSys/blob/6bd8188175c5d4cc380808cbce2befebac65557b/006.3signals4ipc/signals4ipc.c#L105
+[il signal handler potrebbe anche rimuovere il PID del processo figlio "aspettato" da pid_list ma c'è un problema di concorrenza, per cui dobbiamo prima vedere a lezione i "semafori"]
 
 *terza parte dell'esercizio*
-il programma termina i processi figli eseguiti nel punto precedente, se questi rimangono in esecuzione per più di 10 secondi.
-[il controllo sui processi figli ancora in esecuzione potrebbe essere fatto ogni volta che il programma passa attraverso la seconda parte dell'esercizio oppure attraverso un timer (che non abbiamo ancora visto a lezione)]
+con un meccanismo da definire più in dettaglio (cioè: parliamone in classe), il programma termina i processi figli eseguiti nel punto precedente, se questi rimangono in esecuzione per più di 10 secondi.
+[il controllo sui processi figli ancora in esecuzione potrebbe essere fatto ogni volta che il programma passa attraverso la seconda parte dell'esercizio oppure periodicamente (ad es. ogni secondo) attraverso un timer (che non abbiamo ancora visto a lezione) con l'uso di semafori (che vedremo le prossime lezioni)]
 
